@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense &amp; Budget Visualizer</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Chart.js via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">💰</span>
+      <h1>Expense &amp; Budget Visualizer</h1>
+    </div>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark and light mode">
+      <span class="theme-icon">🌙</span>
+    </button>
+  </header>
+
+  <main class="container">
+    <!-- Balance + budget limit -->
+    <section class="card balance-card" aria-label="Total balance">
+      <p class="card-label">Total Balance (Spent)</p>
+      <p id="balance" class="balance">$0.00</p>
+      <div class="budget-row">
+        <label for="budgetLimit">Monthly Budget Limit</label>
+        <input type="number" id="budgetLimit" min="0" step="0.01" placeholder="Set a limit" inputmode="decimal" />
+      </div>
+      <p id="budgetStatus" class="budget-status" role="status" hidden></p>
+    </section>
+
+    <!-- Add expense form -->
+    <section class="card form-card">
+      <h2 class="card-title">Add Expense</h2>
+      <form id="expenseForm" novalidate>
+        <div class="field">
+          <label for="itemName">Item Name</label>
+          <input type="text" id="itemName" placeholder="e.g. Lunch" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" min="0" step="0.01" placeholder="0.00" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" required></select>
+        </div>
+        <div class="custom-category">
+          <input type="text" id="customCategory" placeholder="New category name" autocomplete="off" />
+          <button type="button" id="addCategoryBtn" class="btn btn-secondary">Add Category</button>
+        </div>
+        <p id="formError" class="form-error" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary btn-block">Add Transaction</button>
+      </form>
+    </section>
+
+    <!-- Pie chart -->
+    <section class="card chart-card">
+      <h2 class="card-title">Spending Distribution</h2>
+      <div class="chart-wrap">
+        <canvas id="categoryChart" role="img" aria-label="Pie chart of spending by category"></canvas>
+      </div>
+      <p id="chartEmpty" class="empty-hint" hidden>No spending data for this view yet.</p>
+    </section>
+
+    <!-- Controls: month view + sort -->
+    <section class="card controls-card">
+      <div class="control-group">
+        <label for="monthSelect">View Month</label>
+        <select id="monthSelect">
+          <option value="all">All Months</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="sortBy">Sort By</label>
+        <select id="sortBy">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="amount-desc">Amount: High → Low</option>
+          <option value="amount-asc">Amount: Low → High</option>
+          <option value="category-asc">Category: A → Z</option>
+          <option value="category-desc">Category: Z → A</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Monthly summary -->
+    <section id="summaryCard" class="card summary-card">
+      <h2 class="card-title" id="summaryTitle">Summary</h2>
+      <p id="summaryTotal" class="summary-total">$0.00</p>
+      <div id="summaryBreakdown" class="summary-breakdown"></div>
+      <div class="budget-progress">
+        <div class="budget-progress-bar"><span id="budgetProgressBar"></span></div>
+        <p id="budgetProgressLabel" class="budget-progress-label"></p>
+      </div>
+    </section>
+
+    <!-- Transactions -->
+    <section class="card list-card">
+      <h2 class="card-title">Transactions</h2>
+      <ul id="transactionList" class="transaction-list" aria-label="Transactions"></ul>
+      <p id="emptyState" class="empty-state">No transactions yet. Add one above!</p>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
